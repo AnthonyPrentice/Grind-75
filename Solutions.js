@@ -105,3 +105,58 @@ var topKFrequent = function(nums, k) {var count = new Map();
         }
     }
 };
+
+/**
+ * Time: O(n) Space: O(n)  
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var productExceptSelf = function(nums) {
+    var ret = new Array(nums.length)
+    
+    for(let i = 0; i < nums.length - 1; i++){
+        if(i == 0)
+            ret[i] = 1;
+        ret[i+1] = nums[i]*ret[i];
+    }
+    
+    var post = 1
+    for(let i = nums.length - 1; i >= 0; i--){
+        if(i == nums.length - 1) continue;
+        post *= nums[i+1]
+        ret[i] *= post;
+    }
+    
+    return ret;
+};
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var longestConsecutive = function(nums) {
+    var map = new Map();
+    var largest = 0;
+    for(let i = 0; i < nums.length; i++) //space: O(n) time: O(n)
+        map.set(nums[i], i);
+    
+    for(let i = 0; i < nums.length; i++){ 
+        if(map.has(nums[i] - 1)) continue;
+        else{
+            if(largest == 0) largest++;
+            let curSize = 1;
+            let cur = nums[i] + 1;
+            
+            while(true){
+                if(map.has(cur)){
+                    curSize++;
+                    cur++;
+                }
+                else
+                    break;
+            }
+            if(curSize > largest) largest = curSize;
+        }
+    }
+    return largest;
+};
