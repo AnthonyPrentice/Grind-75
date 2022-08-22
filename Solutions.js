@@ -131,6 +131,7 @@ var productExceptSelf = function(nums) {
 };
 
 /**
+ * Time: O(n) Space: O(n)
  * @param {number[]} nums
  * @return {number}
  */
@@ -159,4 +160,53 @@ var longestConsecutive = function(nums) {
         }
     }
     return largest;
+};
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isPalindrome = function(s) {
+    s = s.replace(/[^0-9a-z]/gi, '');
+    s = s.toLowerCase();
+    
+    var limit = Math.floor(s.length/2);
+    var length = s.length - 1;
+    
+    for(let i = 0; i < limit; i++)
+        if(s[i] != s[length-i]) return false;
+        
+    return true;
+};
+
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
+    var ret = [];
+    nums.sort((a, b) => a - b);
+    
+    for(let i = 0; i < nums.length - 2; i++){
+        if(i > 0 && nums[i] == nums[i-1]) continue;
+        
+        let l, r = i + 1, nums.length - 1;
+        while(l < r){
+            sum = nums[i] + nums[l] + nums[r];
+            if(sum > 0){
+                r--;
+            }
+            else if(sum < 0){
+                l++;
+            }
+            else{
+                ret.push([nums[i], nums[l], nums[r]])
+                l++;
+                while(nums[l] == nums[l-1] && l < r)
+                    l++;
+                      
+            }
+        }
+    }
+    return ret;
 };
