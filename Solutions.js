@@ -210,3 +210,74 @@ var threeSum = function(nums) {
     }
     return ret;
 };
+
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function(height) {
+    var maxArea = 0;
+    var left = 0;
+    var right = height.length - 1;
+    var x = height.length - 1;
+    
+    while(left < right){
+        let min;
+        if(height[left] <= height[right]){
+            min = height[left];
+            left++;
+        }
+        else{
+            min = height[right];
+            right--;
+        }
+        
+        let area = x * min;
+        x--;
+        if(area > maxArea) maxArea = area;
+    }
+    
+    return maxArea;
+};
+
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+    if(prices.length == 1) return 0;
+    var profit = 0;
+    var minIndex = 0
+    
+    for(let i = 1; i < prices.length; i++){
+        if(prices[i] < prices[minIndex])
+            minIndex = i;
+        if(prices[i] - prices[minIndex] > profit)
+            profit = prices[i] - prices[minIndex]
+    }
+    
+    return profit;
+};
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    if(s.length == 0) return 0;
+    var map = new Map();
+    var maxLength = 1;
+    var min = 0;
+    
+    for(let i = 0; i < s.length; i++){
+        while(map.has(s[i])){
+            map.delete(s[min])
+            min++;
+        }
+        map.set(s[i], true);
+        if(map.size > maxLength)
+            maxLength = map.size;
+    }
+    
+    return maxLength;
+};
