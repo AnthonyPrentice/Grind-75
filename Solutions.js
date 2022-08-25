@@ -281,3 +281,63 @@ var lengthOfLongestSubstring = function(s) {
     
     return maxLength;
 };
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+    var stack = [];
+    let map = {
+        ')':'(',
+        ']':'[',
+        '}':'{'
+    }
+    
+    for(let i = 0; i < s.length; i ++){
+        let tail = stack.length - 1;
+        if(s[i] == '(' || s[i] == '[' || s[i] == '{')
+            stack.push(s[i])
+        else if(s[i] == ')' || s[i] == ']' || s[i] == '}'){
+            if(map[s[i]] != stack[tail])
+                return false
+            else
+                stack.pop();
+        }
+    }
+    
+    return !stack.length;
+};
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+    var head = new ListNode(0, null)
+    var cur = head;
+    
+    while(list1 && list2){
+        if(list1.val <= list2.val){
+            cur.next = list1;
+            list1 = list1.next;
+        }
+        else{
+            cur.next = list2;
+            list2 = list2.next;
+        }
+        cur = cur.next;
+    }
+    cur.next = list1 || list2;
+    if(!list1 && !list2) cur.next = null;
+    
+    return head.next;
+};
