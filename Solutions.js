@@ -341,3 +341,52 @@ var mergeTwoLists = function(list1, list2) {
     
     return head.next;
 };
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var reverseList = function(head) {
+    let [prev, current] = [null, head]
+    
+    while(current){
+        [current.next, prev, current] = [prev, current, current.next];
+    }
+    
+    return prev;
+};
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+    var stack = [root];
+    
+    while(stack.length){
+        let cur = stack.pop();
+        if(cur == null) continue;
+        if(cur.left) stack.push(cur.left);
+        if(cur.right) stack.push(cur.right);
+        let temp = cur.left;
+        cur.left = cur.right;
+        cur.right = temp;
+    }
+    
+    return root;
+};
