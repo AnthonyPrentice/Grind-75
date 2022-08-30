@@ -410,3 +410,62 @@ var maxDepth = function(root) {
     return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
 };
 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function(p, q) {
+    let stack1 = [p]
+    let stack2 = [q]
+    let node1, node2;
+    
+    while(stack1.length && stack2.length){
+        node1 = stack1.pop();
+        node2 = stack2.pop();
+        if(!node1 && !node2);
+        else if((node1 && !node2) || (!node1 && node2)) return false;
+        else if(node1.val != node2.val) return false;
+        else{
+            stack1.push(node1.left, node1.right);
+            stack2.push(node2.left, node2.right);  
+        }
+    }
+    if(stack1.length && !stack2.length) return false;
+    if(!stack1.length && stack2.length) return false;
+    
+    return true;
+};
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+
+var climbStairs = function(n) {
+    var distinct = (c, n, map) => {
+        if(map.has(c))
+            return map.get(c);
+        if(c > n){
+            map.set(c, 0);
+            return 0;
+        }
+        if(c == n){
+            map.set(c, 1);
+            return 1;
+        }
+        let result = distinct(c+1, n, map) + distinct(c+2, n, map);
+        map.set(c, result);
+        return result;
+    }
+    
+    return distinct(0, n, new Map());
+}
