@@ -469,3 +469,36 @@ var climbStairs = function(n) {
     
     return distinct(0, n, new Map());
 }
+
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function(s, k) {
+    let count = [];
+    let res = 0;
+    
+    let left = 0;
+    for(let right = 0; right < s.length; right++){
+        let wl, lrc; //window length | longest repeating character
+        let char = s[right];
+        
+        if(char in count) ++count[char];
+        else count[char] = 1;
+        
+        wl = right - left + 1;
+        lrc = Math.max.apply(Math, Object.values(count));
+        
+        while((wl - lrc) > k){
+            --count[s[left]];
+            ++left;
+            --wl;
+        }
+        
+        //update longest
+        if(wl > res) res = wl;
+    }
+    
+    return res;
+};
