@@ -534,3 +534,66 @@ var diameterOfBinaryTree = function(root) {
     
     return max;
 };
+
+/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+var isValidSudoku = function(board) {
+    for(let r = 0; r < 9; r++){
+        let cVisited = new Map();
+        for(let c = 0; c < 9; c++){
+            if(board[r][c] === '.') continue;
+            if(cVisited.has(board[r][c])) return false;
+            else cVisited.set(board[r][c], true);
+        }
+    }
+    
+    for(let c = 0; c < 9; c++){
+        let rVisited = new Map();
+        for(let r = 0; r < 9; r++){
+            if(board[r][c] === '.') continue;
+            if(rVisited.has(board[r][c])) return false;
+            else rVisited.set(board[r][c], true);
+        }
+    }
+    
+    let blocks = new Map();
+    for(let r = 0; r < 9; r++){
+        for(let c = 0; c < 9; c++){
+            if(board[r][c] === '.') continue;
+            let key = String([Math.floor(r/3), Math.floor(c/3)]);
+            if(blocks.has(key)) {
+                let arr = blocks.get(key);
+                if(arr.includes(board[r][c])) return false;
+                else {
+                    arr.push(board[r][c])
+                    blocks.set(key, arr); 
+                }
+            }
+            else blocks.set(key, [board[r][c]]);
+        }
+    }
+    
+    return true;
+};
+
+/**
+ * @param {number[]} numbers
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(numbers, target) {
+    let left = 0;
+    let right = numbers.length - 1;
+    
+    while(left < right){
+        let sum = numbers[left] + numbers[right];
+        if(sum == target) 
+            return [left + 1, right + 1];
+        else if(sum > target)
+            right--;
+        else
+            left++;
+    }
+};
