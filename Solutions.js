@@ -597,3 +597,62 @@ var twoSum = function(numbers, target) {
             left++;
     }
 };
+
+var Trie = function() {
+    this.node = {};
+};
+
+/** 
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function(word) {
+    let iter = this.node;
+    for(let c of word){
+        if(iter[c])
+            iter = iter[c]
+        else{
+            iter[c] = {}
+            iter = iter[c];
+        }
+    }
+    iter.isWord = true;
+};
+
+/** 
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function(word) {
+    let iter = this.node;
+    for(let c of word){
+        if(iter[c])
+            iter = iter[c];
+        else
+            return false;
+    }
+    return (iter.isWord ? true : false);
+};
+
+/** 
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function(prefix) {
+    let iter = this.node;
+    for(let c of prefix){
+        if(iter[c])
+            iter = iter[c];
+        else
+            return false;
+    }
+    return true;
+};
+
+/** 
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
