@@ -656,3 +656,16 @@ Trie.prototype.startsWith = function(prefix) {
  * var param_2 = obj.search(word)
  * var param_3 = obj.startsWith(prefix)
  */
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var singleNumber = function(nums) {
+    let res = 0;
+    
+    for(let num of nums)
+        res = num ^ res;
+    
+    return res;
+};
