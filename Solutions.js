@@ -669,3 +669,105 @@ var singleNumber = function(nums) {
     
     return res;
 };
+
+/**
+ * @param {number} n - a positive integer
+ * @return {number}
+ */
+var hammingWeight = function(n) {
+    let res = 0;
+    
+    while(n){
+        res += n & 1;
+        n = n >>> 1;
+    }
+    
+    return res;
+};
+
+/**
+ * @param {number} k
+ * @param {number[]} nums
+ */
+function PriorityQueue(nums) {
+    this.nums = nums;
+    
+    this.heapify = () => {
+        if(this.size() < 2) return;
+        for(let i = 1; i < this.size(); i++)
+            this.bubbleUp(i);
+    }
+    this.bubbleUp = (index) => {
+        while(index != 0){
+            let parentIndex = (index - 1) >> 1;
+            if(this.compare(this.nums[index], this.nums[parentIndex]) < 0) {
+                this.swap(index, parentIndex);
+                index = parentIndex;
+            }
+            else break;
+        }        
+    }
+    this.bubbleDown = (index) => {
+        let last = this.size() - 1;
+        while(true) {
+            let left = (index*2) + 1;
+            let right = (index*2) + 2;
+            let cur = index;
+            if(left <= last && this.compare(this.nums[left], this.nums[cur]) < 0)
+                cur = left;
+            if(right <= last && this.compare(this.nums[right], this.nums[cur]) < 0)
+                cur = right;
+            if(cur != index) {
+                this.swap(cur, index)
+                index = cur;
+            }
+            else break;
+        }
+    }
+    this.swap = (index1, index2) => {
+        [this.nums[index1], this.nums[index2]] = [this.nums[index2], this.nums[index1]];
+    }
+    this.insert = (val) => {
+        this.nums.push(val);
+        this.bubbleUp(this.size() - 1);
+    }
+    this.pop = () => {
+        if(this.size() == 0) return null;
+        let ret = this.nums[0];
+        let last = this.nums.pop();
+        if(this.size() != 0){
+            this.nums[0] = last;
+            this.bubbleDown(0);
+        }
+        return ret;
+    }
+    this.peek = () => (this.size() > 0 ? this.nums[0] : null);
+    this.compare = (a, b) => a - b;
+    this.size = () => this.nums.length;
+    this.print = () => console.log(this.nums);
+    this.heapify();
+}
+
+var KthLargest = function(k, nums) {
+    this.limit = k;
+    this.minHeap = new PriorityQueue(nums);
+    while(this.minHeap.size() > this.limit)
+        this.minHeap.pop();
+};
+
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthLargest.prototype.add = function(val) {
+    this.minHeap.insert(val);
+    while(this.minHeap.size() > this.limit)
+        this.minHeap.pop();
+    return this.minHeap.peek();
+};
+
+/** 
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(val)
+ */
