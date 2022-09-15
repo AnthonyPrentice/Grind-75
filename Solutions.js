@@ -771,3 +771,79 @@ KthLargest.prototype.add = function(val) {
  * var obj = new KthLargest(k, nums)
  * var param_1 = obj.add(val)
  */
+
+function PriorityQueue(nums) {
+    this.nums = nums;
+    
+    this.heapify = () => {
+        if(this.size() < 2) return;
+        for(let i = 1; i < this.size(); i++)
+            this.bubbleUp(i);
+    }
+    this.insert = (val) => {
+        this.nums.push(val);
+        this.bubbleUp(this.size() - 1);
+    }
+    this.pop = () => {
+        if(!this.size()) return null;
+        let ret = this.nums[0];
+        let last = this.nums.pop();
+        if(this.size()){
+            this.nums[0] = last;
+            this.bubbleDown(0);
+        }
+        return ret;
+    }
+    this.bubbleUp = (index) => {
+        while(index > 0){
+            let pIndex = (index - 1) >> 1;
+            if(this.compare(this.nums[index], this.nums[pIndex]) > 0) {
+                this.swap(index, pIndex);
+                index = pIndex;
+            }
+            else break;
+        }
+    }
+    this.bubbleDown = (index) => {
+        while(true){
+            let gIndex = index;
+            let lIndex = (gIndex * 2) + 1;
+            let rIndex = (gIndex * 2) + 2;
+            if(lIndex < this.size() &&
+               this.compare(this.nums[lIndex], this.nums[gIndex]) > 0)
+                gIndex = lIndex;
+            if(rIndex < this.size() &&
+               this.compare(this.nums[rIndex], this.nums[gIndex]) > 0)
+                gIndex = rIndex;
+            if(index != gIndex){
+                this.swap(index, gIndex);
+                index = gIndex;
+            }
+            else break;
+        }
+        
+    }
+    this.swap = (index1, index2) => {
+        [this.nums[index1], this.nums[index2]] = [this.nums[index2], this.nums[index1]];
+    }
+    this.compare = (a, b) => a-b;
+    this.size = () => this.nums.length;
+    this.peek = () => (this.size() ? this.nums[0] : null);
+    this.heapify();
+}
+
+var lastStoneWeight = function(stones) {
+    let maxHeap = new PriorityQueue(stones);
+    while(maxHeap.size() > 1){
+        let y = maxHeap.pop();
+        let x = maxHeap.pop();
+        console.log(y);
+        console.log(x); 
+        console.log(maxHeap.nums);
+        console.log("---------")
+        if(x == y) continue;
+        else maxHeap.insert(y - x);
+    }
+    if(maxHeap.size()) return maxHeap.pop();
+    else return 0;
+};
