@@ -847,3 +847,103 @@ var lastStoneWeight = function(stones) {
     if(maxHeap.size()) return maxHeap.pop();
     else return 0;
 };
+
+function PriorityQueue(nums){
+    this.nums = nums;
+    
+    this.heapify = () => {
+        if(this.size() < 2) return;
+        for(let i = 0; i < this.size(); i++)
+            this.bubbleUp(i);
+    }
+    this.insert = (val) => {
+        this.nums.push(val);
+        this.bubbleUp(this.size() - 1);
+    }
+    this.pop = () => {
+        let ret = this.nums[0];
+        let last = this.nums.pop();
+        if(this.size()){
+            this.nums[0] = last;
+            this.bubbleDown(0);
+        }
+        return ret;
+    }
+    this.bubbleUp = (index) => {
+        while(index > 0){
+            let parent = (index - 1) >> 1;
+            if(this.compare(this.nums[index], this.nums[parent]) < 0) {
+                this.swap(index, parent);
+                index = parent;
+            }
+            else break;
+        }
+    }
+    this.bubbleDown = (index) => {
+        while(true){
+            let left = (index * 2) + 1;
+            let right = (index * 2) + 2;
+            let iter = index;
+            if(left < this.size() &&
+               this.compare(this.nums[left], this.nums[iter]) < 0)
+                iter = left;
+            if(right < this.size() &&
+               this.compare(this.nums[right], this.nums[iter]) < 0)
+                iter = right;
+            if(iter != index){
+                this.swap(iter, index);
+                index = iter;
+            }
+            else break;
+        }
+    }
+    this.compare = (a,b) => a-b;
+    this.swap = (index1, index2) => {
+        [this.nums[index1], this.nums[index2]] = [this.nums[index2],                      this.nums[index1]]
+    }
+    this.size = () => this.nums.length;
+    this.peek = () => (this.size() ? this.nums[0] : null);
+    this.heapify();
+}
+
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kClosest = function(points, k) {
+    let ret = [];
+    let limit = k;
+    let map = new Map();
+    let distances = []
+    
+    for(let point of points){
+        let x = point[0];
+        let y = point[1];
+        let dist = Math.sqrt(x*x + y*y)
+        distances.push(dist);
+        if(!map.has(dist))
+            map.set(dist, [point]);
+        else {
+            let arr = map.get(dist);
+            arr.push(point);
+            map.set(dist, arr);
+        }
+    }
+    
+    let minHeap = new PriorityQueue(distances);
+    while(true){
+        let dist = minHeap.pop();
+        let arr = map.get(dist);
+        for(let i = 0; i < arr.length; i++) {
+            if(limit){
+                let point = arr[i];
+                ret.push(point);
+                --limit;
+            }
+            else break
+        }
+        if(!limit) break;
+    }
+    return ret;
+};
