@@ -1021,3 +1021,56 @@ var isBalanced = function(root) {
     if(dif > 1 || dif < -1) return false;
     return isBalanced(root.left) && isBalanced(root.right);
 };
+
+var WordDictionary = function() {
+    this.children = new Array(26).fill(null);
+    this.isWord = false;
+};
+
+/** 
+ * @param {string} word
+ * @return {void}
+ */
+WordDictionary.prototype.addWord = function(word) {
+    let cur = this;
+    for(let w of word){
+        let index = w.charCodeAt(0) - 97;
+        if(!cur.children[index])
+            cur.children[index] = new WordDictionary();
+        cur = cur.children[index]
+    }
+    cur.isWord = true;
+};
+
+/** 
+ * @param {string} word
+ * @return {boolean}
+ */
+WordDictionary.prototype.search = function(word) {
+    let cur = this;
+    let len = word.length;
+    for(let i = 0; i < len; i++){
+        let w = word[i];
+        let index = w.charCodeAt(0) - 97;
+        if(w == '.'){
+            let sub = word.substr(i + 1, len - i - 1);
+            for(let child of cur.children)
+                if(child && child.search(sub)) return true;
+            return false;
+        }
+        else if(cur.children[index]) cur = cur.children[index];
+        else return false;
+    }
+    return cur.isWord;
+};
+
+/**
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = function(cost) {
+    let min = [cost[0], cost[1]];
+    for(let i = 2; i < cost.length; i++)
+        min[i] = Math.min(min[i - 1], min[i - 2]) + cost[i];
+    return Math.min(min[cost.length - 1], min[cost.length - 2]);
+};
