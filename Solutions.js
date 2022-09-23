@@ -1074,3 +1074,16 @@ var minCostClimbingStairs = function(cost) {
         min[i] = Math.min(min[i - 1], min[i - 2]) + cost[i];
     return Math.min(min[cost.length - 1], min[cost.length - 2]);
 };
+
+var rob = function(nums) {
+    let r1 = 0;
+    let r2 = 0;
+    
+    for(let n of nums) {
+        let temp = Math.max(n + r1, r2);
+        r1 = r2;
+        r2 = temp;
+    }
+    
+    return r2;
+};
