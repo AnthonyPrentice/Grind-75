@@ -1087,3 +1087,53 @@ var rob = function(nums) {
     
     return r2;
 };
+
+var rob = function(nums) {
+    if(nums.length == 1) return nums[0];
+    function rb(arr){
+        let max1 = 0;
+        let max2 = 0;
+        for(let n of arr) {
+            let temp = Math.max(n + max1, max2);
+            max1 = max2;
+            max2 = temp;
+        }
+        return max2;
+    }
+    let max1 = rb(nums.slice(0, nums.length - 1));
+    let max2 = rb(nums.slice(1, nums.length));
+    return Math.max(max1, max2);
+};
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    let ret = "";
+    
+    for(let i = 0; i < s.length; i++) {
+        //odd
+        let l = r = i;
+        while(l >= 0 && r < s.length && s[l] == s[r]) {
+            let sub = s.slice(l, r + 1);
+            if(sub.length > ret.length)
+                ret = sub;
+            l--;
+            r++;
+        }
+        
+        //even
+        l = i;
+        r = i + 1;
+        while(l >= 0 && r < s.length && s[l] == s[r]){
+            let sub = s.slice(l, r + 1);
+            if(sub.length > ret.length)
+                ret = sub;
+            l--;
+            r++;
+        }
+    }
+    
+    return ret;
+};
