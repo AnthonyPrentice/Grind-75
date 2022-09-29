@@ -1137,3 +1137,68 @@ var longestPalindrome = function(s) {
     
     return ret;
 };
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var countSubstrings = function(s) {
+    let num = 0;
+    
+    for(let i = 0; i < s.length; i++){
+        let l = r = i;
+        while(l >= 0 && r < s.length && s[l]==s[r]){
+            num++;
+            l--;
+            r++;
+        }
+        
+        l = i;
+        r = i + 1;
+        while(l >= 0 && r < s.length && s[l]==s[r]){
+            num++;
+            l--;
+            r++;
+        }
+    }
+    
+    return num;
+};
+
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function(candidates, target) {
+    let ret = [];
+    let stack = [ [[], [...candidates]] ];
+    
+    while(stack.length){
+        let node = stack.pop();
+        let combination = node[0];
+        let sub = node[1];
+        if(!sub.length) continue;
+        let sum = 0;
+        let n = sub[0];
+        
+        for(let num of combination)
+            sum += num;
+        
+        if(sum == target)
+            ret.push(combination);
+        else if(sum > target) continue;
+        else{
+            let appended = [...combination];
+            let newSub = [...sub];
+            appended.push(n);
+            newSub.shift();
+            let leftNode = [appended, sub];
+            let rightNode = [combination, newSub];
+            stack.push(leftNode);
+            stack.push(rightNode);
+        }
+    }
+    
+    return ret;
+};
