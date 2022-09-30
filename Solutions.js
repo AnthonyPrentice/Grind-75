@@ -1202,3 +1202,75 @@ var combinationSum = function(candidates, target) {
     
     return ret;
 };
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findMin = function(nums) {
+    let min = 0;
+    let mid = Math.floor((nums.length - 1)/2);
+    let max = nums.length - 1;
+    let smallest = nums[mid];
+    
+    while(min != mid && max != mid) {
+        if(nums[mid] > nums[max])
+            min = mid;
+        else if(nums[mid] < nums[max])
+            max = mid;
+        mid = Math.floor((min+max)/2);
+    }
+    let less = Math.min(nums[min], nums[max])
+    if(less < smallest) smallest = less;
+    return smallest;
+};
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {void} Do not return anything, modify head in-place instead.
+ */
+var reorderList = function(head) {
+    let mid = fast = head;
+    
+    //find mid
+    while(true){
+        if(fast.next){
+            if(fast.next.next){
+                fast = fast.next.next;
+                mid = mid.next;
+            } else break;
+        } else break;
+    }
+    
+    //reverse second half
+    let prev = null;
+    let left = (mid ? mid.next : null);
+    let right = (left ? left.next : null);
+    mid.next = null;
+    while(right) {
+        let temp = right.next;
+        right.next = left;
+        left.next = prev;
+        [prev, left, right] = [left, right, temp];
+    }
+    
+    //insert second half into first
+    let [iter1, iter2] = [head, left];
+    let temp1 = (iter1 ? iter1.next : null);
+    let temp2 = (iter2 ? iter2.next : null);
+    while(iter1 || iter2){
+        if(iter1) iter1.next = iter2;
+        if(iter2) iter2.next = temp1;
+        iter1 = (temp1 ? temp1 : null);
+        iter2 = (temp2 ? temp2 : null);
+        temp1 = (iter1 ? iter1.next : null);
+        temp2 = (iter2 ? iter2.next : null);
+    }
+};
