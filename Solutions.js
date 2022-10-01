@@ -1274,3 +1274,56 @@ var reorderList = function(head) {
         temp2 = (iter2 ? iter2.next : null);
     }
 };
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    if(!root) return [];
+    let ret = []
+    let queue = [root];
+    let levSize = queue.length;
+    let curLev = []
+    
+    while(queue.length){
+        let iter = queue.shift();
+        curLev.push(iter.val);
+        if(iter.left) queue.push(iter.left);
+        if(iter.right) queue.push(iter.right);
+        levSize--;
+        
+        if(levSize < 1){
+            ret.push(curLev);
+            curLev = [];
+            levSize = queue.length;
+        }
+    }
+    
+    return ret;
+};
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    let [max, run] = [nums[0], nums[0]];
+    
+    for(let i = 1; i < nums.length; i++){
+        let num = nums[i];
+        let sum = num + run;
+        run = Math.max(num, sum);
+        max = Math.max(max, run);
+    }
+    
+    return max;
+};
