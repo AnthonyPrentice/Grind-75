@@ -1327,3 +1327,76 @@ var maxSubArray = function(nums) {
     
     return max;
 };
+
+/**
+ * @param {number[][]} intervals
+ * @param {number[]} newInterval
+ * @return {number[][]}
+ */
+var insert = function(intervals, newInterval) {
+    
+    function checkIntervals(intervals, newInterval) {
+        let left = newInterval[0];
+        let right = newInterval[1];
+        let remove = [];
+        for(let i = 0; i < intervals.length; i++) {
+            let elem = intervals[i];
+        
+            if((left >= elem[0] && left <= elem[1]) || 
+               (right >= elem[0] && right <= elem[1]) ||
+               (elem[0] >= left && elem[0] <= right) ||
+               (elem[1] >= left && elem[1] <= right)) {
+            
+                insert[0] = Math.min(insert[0], elem[0]);
+                insert[1] = Math.max(insert[1], elem[1]);
+                remove.push(elem);
+            }
+        }
+        return remove;
+    }
+    
+    function removeIntervals(intervals, remove){
+        for(let e of remove){
+            let index = intervals.indexOf(e);
+            intervals.splice(index, 1);
+        }
+    }
+    
+    function insertInterval(intervals, insert) {
+        let len = intervals.length;
+        switch(len) {
+            case 0:
+                intervals.push(insert);
+                break;
+            case 1:
+                if(intervals[0][1] < insert[0]) intervals.push(insert);
+                else intervals.unshift(insert);
+                break;
+            default:
+                for(let i = 0; i < intervals.length - 1; i++) {
+                    let left = intervals[i];
+                    let right = intervals[i + 1];
+                    if(left[1] < insert[0] && right[0] > insert[1]){
+                        intervals.splice(i+1, 0, insert);
+                        break;
+                    } 
+                    if(i == 0 && insert[1] < left[0] && insert[1] < right[0]){
+                        intervals.unshift(insert);
+                        break;
+                    }
+                    if(i + 1 == (intervals.length - 1) && insert[0] > right[1] && insert[0] > left[1]){
+                        console.log("reached")
+                        intervals.push(insert)
+                        break;
+                    }
+                }
+                break;
+        }
+    }
+    
+    let insert = [...newInterval] 
+    let remove = checkIntervals(intervals, newInterval);
+    removeIntervals(intervals, remove);
+    insertInterval(intervals, insert);
+    return intervals;
+};
