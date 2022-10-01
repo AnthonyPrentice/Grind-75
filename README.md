@@ -1,2 +1,2 @@
-# Grind-75
-Solutions to popular leetcode study guide, grind-75
+# Leetcode
+Solutions to popular Neetcode study guide - Neetcode.io
