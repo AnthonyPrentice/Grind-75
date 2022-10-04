@@ -1400,3 +1400,37 @@ var insert = function(intervals, newInterval) {
     insertInterval(intervals, insert);
     return intervals;
 };
+
+/**
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+var merge = function(intervals) {
+    function isOverlapped(a, b) {
+        if( ((a[0] >= b[0]) && (a[0] <= b[1])) ||
+            ((a[1] >= b[0]) && (a[1] <= b[1])) ||
+            ((b[0] >= a[0]) && (b[0] <= a[1])) ||
+            ((b[1] >= a[0]) && (b[1] <= a[1]))) { return true; }
+        return false;
+    }
+    if(intervals.length == 1) return intervals;
+    intervals.sort((a, b) => a[0] - b[0]);
+    
+    let l = 0;
+    let r = 1;
+    while(intervals[r]) {
+        let left = intervals[l], right = intervals[r];
+        if(isOverlapped(left, right)) {
+            let min = Math.min(left[0], right[0]);
+            let max = Math.max(left[1], right[1]);
+            intervals[l] = [min, max];
+            intervals.splice(r, 1);
+        }
+        else {
+            l++;
+            r++;
+        }
+    }
+    
+    return intervals;
+};
