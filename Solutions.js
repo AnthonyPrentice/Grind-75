@@ -1434,3 +1434,19 @@ var merge = function(intervals) {
     
     return intervals;
 };
+
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var sortColors = function(nums) {
+    if(nums.length == 1) return nums;
+    for(let i = 0; i < nums.length - 1; i++) {
+        let left = i, right = i+1;
+        while(left >= 0 && nums[left] > nums[right]){
+            [nums[left], nums[right]] = [nums[right], nums[left]];
+            left--;
+            right--;
+        }
+    }
+};
