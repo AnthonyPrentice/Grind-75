@@ -56,3 +56,127 @@ class Solution {
         return dummy.next;
     }
 }
+
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+class Solution {
+    public static void bfs(ArrayList<Node> queue, Map<Integer, Node> map){
+        int iter = 0;
+        while(iter < queue.size()){
+            Node cur = queue.get(iter);
+            for(Node n : cur.neighbors){
+                if(!map.containsKey(n.val)){
+                    queue.add(n);
+                    map.put(n.val, new Node(n.val));
+                }
+            }
+            iter++;
+        }
+    }
+    
+    public static void addNeighbors(ArrayList<Node> queue, Map<Integer, Node> map) {
+        while(queue.size() != 0){
+            Node cur = queue.get(0);
+            Node newNode = map.get(cur.val);
+            for(Node n : cur.neighbors) {
+                Node neighbor = map.get(n.val);
+                newNode.neighbors.add(neighbor);
+            }
+            queue.remove(0); 
+        }
+        
+    }
+
+    public Node cloneGraph(Node node) {
+        if(node == null) return null;
+        ArrayList<Node> queue = new ArrayList(Arrays.asList(node));
+        Map<Integer, Node> map = new HashMap<Integer, Node>();
+        map.put(node.val, new Node(node.val));
+
+        bfs(queue, map);
+        addNeighbors(queue, map);
+        
+        return map.get(node.val);
+    }
+}
+
+class MedianFinder {
+    PriorityQueue<Double> left, right;
+    
+    public void handleNulls(double num) {
+        if(left.peek() == null) {
+            left.add(num);
+            return;
+        }
+        if(right.peek() == null){
+            if(num < left.peek()){
+                double temp = left.poll();
+                left.add(num);
+                right.add(temp);
+            }
+            else right.add(num);
+            return;
+        }
+    }
+    
+    public MedianFinder() {
+        this.left = new PriorityQueue<>(Comparator.reverseOrder());
+        this.right = new PriorityQueue<>();
+    }
+    
+    public void addNum(double num) {
+        if(left.peek() == null || right.peek() == null){
+            handleNulls(num);
+            return;
+        }
+        double lLen = this.left.size();
+        double rLen = this.right.size();
+        double lTop = this.left.peek();
+        double rTop = this.right.peek();
+        if(lLen <= rLen) {
+            if(num > rTop) {
+                double temp = right.poll();
+                right.add(num);
+                left.add(temp);
+            }
+            else left.add(num);
+        }
+        else {
+            if(num < lTop){
+                double temp = left.poll();
+                left.add(num);
+                right.add(temp);
+            }
+            else right.add(num);
+        }
+    }
+    
+    public double findMedian() {
+        int size = left.size() + right.size();
+        boolean isEven = (size % 2 == 0) ? true : false;
+        
+        if(size == 1) return left.peek();
+        if(isEven) return ( (left.peek() + right.peek()) / 2);
+        else {
+            if(left.size() > right.size()) return left.peek();
+            else return right.peek();
+        }
+    }
+}
