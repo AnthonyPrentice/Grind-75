@@ -180,3 +180,30 @@ class MedianFinder {
         }
     }
 }
+
+class Solution {
+    //recursion/iterative
+    //dfs 
+    //upper and lower bounds
+    
+    public boolean dfs(TreeNode root, Integer min, Integer max) {
+        if(root == null) return true;
+        if(max != null) {
+            if(root.val >= max) 
+                return false;
+        }
+        if(min != null) {
+            if(root.val <= min) 
+                return false;
+        }
+        
+        boolean valid_left = dfs(root.left, min, root.val);
+        boolean valid_right = dfs(root.right, root.val, max);
+        if(valid_left && valid_right) return true;
+        else return false;
+    }
+    
+    public boolean isValidBST(TreeNode root) {
+         return dfs(root, null, null);
+    }
+}
