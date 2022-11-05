@@ -207,3 +207,38 @@ class Solution {
          return dfs(root, null, null);
     }
 }
+
+class Solution {
+    public boolean dfs(int x, int y, int i, String word, char[][] board) {
+        if( i == word.length() ) return true;
+        if( x < 0 || x >= board.length || 
+            y < 0 || y >= board[x].length) return false;
+        
+        Boolean ret = false;
+        char c = board[x][y];
+        if(c == word.charAt(i)) {
+            board[x][y] = '*';
+
+            ret = ( dfs(x + 1, y, i+1, word, board) ||
+                    dfs(x - 1, y, i+1, word, board) ||
+                    dfs(x, y + 1, i+1, word, board) ||
+                    dfs(x, y - 1, i+1, word, board) );
+
+            board[x][y] = c;
+        }
+
+        return ret;
+    }
+
+    public boolean exist(char[][] board, String word) {
+
+        for(int x = 0; x < board.length; x++) {
+            for(int y = 0; y < board[x].length; y++) {
+                if( dfs(x, y, 0, word, board) ) 
+                    return true;
+            }
+        }
+
+        return false;
+    }
+}
