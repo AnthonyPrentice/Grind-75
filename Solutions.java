@@ -242,3 +242,58 @@ class Solution {
         return false;
     }
 }
+
+//slow, fast set to head
+//find mid
+//reverse 2nd half
+//check palindrome
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if(head.next == null) return true;
+        else if (head.next.next == null) return (head.val == head.next.val);
+        ListNode slow = head, fast = head;
+        int mid = 0;
+
+        while(true){
+            if(fast.next == null) break;
+            else if(fast.next.next == null) {
+                mid++;
+                break;
+            }
+            else {
+                slow = slow.next;
+                fast = fast.next.next;
+                mid++;
+            }
+        }
+
+        slow = slow.next;
+        ListNode temp = null, prev = null;
+        while(slow != null){
+            temp = slow.next;
+            slow.next = prev;
+            prev = slow;
+            slow = temp;
+        }
+
+        ListNode iter = head;
+        for(int i = 0; i < mid; i++) {
+            if(iter.val != prev.val) return false;
+            iter = iter.next;
+            prev = prev.next;
+        }
+        
+        return true;
+    }
+}
