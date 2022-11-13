@@ -297,3 +297,37 @@ class Solution {
         return true;
     }
 }
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        Queue<ListNode> pq = new PriorityQueue<>(new Comparator<ListNode>() {
+            @Override
+            public int compare(ListNode n1, ListNode n2){
+                if(n1.val < n2.val)
+                    return -1;
+                else if(n1.val > n2.val)
+                    return 1;
+                else   
+                    return 0;
+            }
+        });
+
+        for(ListNode n : lists){
+            ListNode iter = n;
+            while(iter != null){
+                pq.offer(iter);
+                iter = iter.next;
+            }
+        }
+
+        ListNode dummy = new ListNode();
+        ListNode iter = dummy;
+        while(pq.size() != 0){
+            iter.next = pq.poll();
+            iter = iter.next;
+        }
+        iter.next = null;
+
+        return dummy.next;
+    }
+}
