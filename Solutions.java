@@ -331,3 +331,41 @@ class Solution {
         return dummy.next;
     }
 }
+
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        List<List<Integer>> ret = new ArrayList<>();
+        int rows_len = heights.length;
+        int cols_len = heights[0].length;
+        boolean[][] pac = new boolean[rows_len][cols_len];
+        boolean[][] atl = new boolean[rows_len][cols_len];
+
+        for(int r = 0; r < rows_len; r++) {
+            dfs(r, 0, rows_len, cols_len, pac, new boolean[rows_len][cols_len], heights[r][0], heights);
+            dfs(r, cols_len - 1, rows_len, cols_len, atl, new boolean[rows_len][cols_len], heights[r][cols_len - 1], heights);
+        }
+        for(int c = 0; c < cols_len; c++) {
+            dfs(0, c, rows_len, cols_len, pac, new boolean[rows_len][cols_len], heights[0][c], heights);
+            dfs(rows_len - 1, c, rows_len, cols_len, atl, new boolean[rows_len][cols_len], heights[rows_len - 1][c], heights);
+        }
+
+        for(int r = 0; r < rows_len; r++) 
+            for(int c = 0; c < cols_len; c++) 
+                if(pac[r][c] && atl[r][c])
+                    ret.add(Arrays.asList(r,c));
+
+        return ret;
+    }
+
+    public void dfs(int r, int c, int rows_len, int cols_len, boolean[][] reached, boolean[][] traversal, int prevHeight, int[][] heights) {
+        if(r < 0 || r >= rows_len || c < 0 || c >= cols_len || traversal[r][c] == true || prevHeight > heights[r][c])
+            return;
+
+        traversal[r][c] = true;
+        reached[r][c] = true;
+        dfs(r + 1, c, rows_len, cols_len, reached, traversal, heights[r][c], heights);
+        dfs(r - 1, c, rows_len, cols_len, reached, traversal, heights[r][c], heights);
+        dfs(r, c + 1, rows_len, cols_len, reached, traversal, heights[r][c], heights);
+        dfs(r, c - 1, rows_len, cols_len, reached, traversal, heights[r][c], heights);
+    }
+}
