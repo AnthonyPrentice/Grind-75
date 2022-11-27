@@ -369,3 +369,30 @@ class Solution {
         dfs(r, c - 1, rows_len, cols_len, reached, traversal, heights[r][c], heights);
     }
 }
+
+class Solution {
+    List<Integer> array;
+    int k;
+
+    public void inOrder(TreeNode root) {
+        if(root.left != null) 
+            inOrder(root.left); 
+
+        if(this.array.size() == k) return;
+        this.array.add(root.val);
+
+        if(root.right != null) 
+            inOrder(root.right); 
+    }
+
+    public int kthSmallest(TreeNode root, int k) {
+        this.array = new ArrayList<>();
+        this.k = k;
+
+        inOrder(root);
+
+        int size = this.array.size();
+        int ret = this.array.get(size - 1);
+        return ret;
+    }
+}
