@@ -396,3 +396,26 @@ class Solution {
         return ret;
     }
 }
+
+class Solution {
+    public boolean validPalindrome(String s) {
+        int l = 0;
+        int r = s.length() - 1;
+
+        for(int i = 0; i < s.length() / 2; i++) {
+            if( s.charAt(l) == s.charAt(r) ) {
+                l++;
+                r--;
+            }
+            else return isPalindrome(s, l + 1, r) || isPalindrome(s, l, r - 1);
+        }
+
+        return true;
+    }
+
+    public boolean isPalindrome(String s, int left, int right) {
+        if(left >= right) return true;
+        if( s.charAt(left) != s.charAt(right) ) return false;
+        else return isPalindrome(s, left + 1, right - 1);
+    }
+}
