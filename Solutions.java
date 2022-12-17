@@ -419,3 +419,31 @@ class Solution {
         else return isPalindrome(s, left + 1, right - 1);
     }
 }
+
+class Solution {
+    public int getIndex(int[] array, int value){
+        for(int i = 0; i < array.length; i++)
+            if(array[i] == value)
+                return i;
+        return -1;
+    }
+
+    public TreeNode rec(int[] preorder, int[] inorder, int inStart, int inEnd, int preStart, int preEnd) {
+        if(inStart > inEnd || preStart > preEnd) return null;
+        int[] in = Arrays.copyOfRange(inorder, inStart, inEnd);
+        int[] pre = Arrays.copyOfRange(preorder, preStart, preEnd); 
+
+        if(pre.length == 0 || in.length == 0) return null;
+        Integer mid = getIndex(in, pre[0]);
+        TreeNode root = new TreeNode(pre[0]);
+
+        root.left = rec(pre, in, 0, mid, 1, mid + 1); 
+        root.right = rec(pre, in, mid + 1, in.length, mid + 1, pre.length);
+        
+        return root;
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return rec(preorder, inorder, 0, inorder.length, 0, preorder.length);
+    }
+}
