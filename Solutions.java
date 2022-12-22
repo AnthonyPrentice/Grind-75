@@ -447,3 +447,40 @@ class Solution {
         return rec(preorder, inorder, 0, inorder.length, 0, preorder.length);
     }
 }
+
+class Solution {
+    public Boolean dfs(ArrayList[] edges, Boolean[] visited, Integer current, Boolean[] dp) {
+        if(visited[current]) return false; 
+        if(dp[current] != null) return true;
+        visited[current] = true;
+
+        for(int i = 0; i < edges[current].size(); i++)
+            if( !dfs(edges, visited, (int)edges[current].get(i), dp) ) 
+                return false;   
+
+        dp[current] = true;
+        visited[current] = false;
+        return true;
+    }
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        ArrayList[] edges = new ArrayList[numCourses];
+        Boolean[] visited = new Boolean[numCourses];
+        Boolean[] dp = new Boolean[numCourses];
+
+        for(int i = 0; i < numCourses; i++) {
+            edges[i] = new ArrayList<Integer>();
+            visited[i] = false;
+        }
+
+        for(int[] pair : prerequisites) 
+            edges[pair[0]].add(pair[1]);
+
+        for(int i = 0; i < numCourses; i++){
+            if( !dfs(edges, visited, i, dp) )
+                return false;
+        }
+        
+        return true;   
+    }
+}
