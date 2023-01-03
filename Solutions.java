@@ -484,3 +484,25 @@ class Solution {
         return true;   
     }
 }
+
+class Solution {
+    public int dfs(int p, String s, Integer[] mem) {
+        if(p >= s.length()) return 1;
+        if(s.charAt(p) == '0') return 0;
+        if(mem[p] != null) return mem[p];
+
+        int res1 = dfs(p+1, s, mem);
+        int res2 = 0;
+
+        if(p < s.length() - 1 && (s.charAt(p) == '1' || s.charAt(p) == '2' && s.charAt(p+1) < '7'))
+            res2 = dfs(p+2, s, mem);
+        
+        mem[p] = res1 + res2;
+        return mem[p];
+    }
+    public int numDecodings(String s) {
+        int size = s.length();
+        Integer[] mem = new Integer[size];
+        return size == 0 ? 0 : dfs(0, s, mem);
+    }
+}
