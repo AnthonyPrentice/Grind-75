@@ -506,3 +506,35 @@ class Solution {
         return size == 0 ? 0 : dfs(0, s, mem);
     }
 }
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        if(amount == 0) return 0;
+
+        Queue<Integer> queue = new LinkedList<>();
+        for(int c : coins) queue.add(c);
+        int level = queue.size();
+        HashSet<Integer> dup = new HashSet<>();
+        int ret = 1;
+
+        while(queue.size() > 0) {
+            if(level == 0){
+                ret++;
+                level = queue.size();
+            }
+
+            int cur = queue.poll();
+            level--;
+
+            if(dup.contains(cur)) continue;
+            if(cur > amount) continue;
+            if(cur == amount) return ret;
+            
+            for(int c : coins) queue.add(cur + c);
+
+            dup.add(cur);
+        }
+
+        return -1;
+    }
+}
