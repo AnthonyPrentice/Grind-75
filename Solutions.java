@@ -538,3 +538,26 @@ class Solution {
         return -1;
     }
 }
+
+class Solution {
+    public int maxProduct(int[] nums) {
+        int ret = nums[0];
+        int max = ret;
+        int min = ret;
+        int temp;
+
+        for(int i = 1; i < nums.length; i++){
+            Integer[] candidates = {nums[i], min*nums[i], max*nums[i]};
+
+            temp = Math.max(candidates[0], candidates[1]);
+            max = Math.max(temp, candidates[2]);
+
+            temp = Math.min(candidates[0], candidates[1]);
+            min = Math.min(temp, candidates[2]);
+
+            ret = Math.max(ret, max);
+        }
+
+        return ret;
+    }
+}
