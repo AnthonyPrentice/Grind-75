@@ -561,3 +561,24 @@ class Solution {
         return ret;
     }
 }
+
+class Solution {
+    int m;
+    int n;
+    public int dfs(int x, int y, HashMap<String, Integer> dup) {
+        if(x >= m || y >= n) return 0;
+        if(dup.containsKey(x+","+y)) return dup.get(x+","+y);
+        if(x == m - 1 && y == n - 1) return 1;
+
+        dup.put(x+","+y, dfs(x+1, y, dup) + 
+                        dfs(x, y+1, dup) );
+
+        return dup.get(x+","+y);
+    }
+
+    public int uniquePaths(int m, int n) {
+        this.m = m;
+        this.n = n;
+        return dfs(0, 0, new HashMap<>());
+    }
+}
